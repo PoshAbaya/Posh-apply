@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html data-lang="ar" lang="ar">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>بوش عباية · Daily Closing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --navy:#16213E; --gold:#C9A24B;
+  --bg:#F6F5F1; --surface:#FFFFFF; --fg:#1A1F2E; --muted:#6B6F7B; --line:#E3E1DA;
+  --accent:#16213E; --accent-fg:#FFFFFF; --gold-soft:#F3EAD3;
+  --ok:#2E7D4F; --ok-soft:#E3F2E8; --warn:#B26A00; --warn-soft:#FBEFD9; --bad:#B3261E; --bad-soft:#FBE4E2;
+  --f-ar:"IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif;
+  --f-en:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1424; --surface:#182036; --fg:#ECEAE4; --muted:#9BA0AE; --line:#2A3350;
+  --accent:#C9A24B; --accent-fg:#16213E; --gold-soft:#2C2A22;
+  --ok:#6CC28F; --ok-soft:#173226; --warn:#E3A84A; --warn-soft:#3A2D14; --bad:#F08A82; --bad-soft:#3D1C1C; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1424; --surface:#182036; --fg:#ECEAE4; --muted:#9BA0AE; --line:#2A3350;
+  --accent:#C9A24B; --accent-fg:#16213E; --gold-soft:#2C2A22;
+  --ok:#6CC28F; --ok-soft:#173226; --warn:#E3A84A; --warn-soft:#3A2D14; --bad:#F08A82; --bad-soft:#3D1C1C; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-ar);font-size:15px;line-height:1.5;margin:0}
+.wrap{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:0 110px}
+.en{font-family:var(--f-en)}
+html[data-lang="ar"] .en,html:not([data-lang]) .en{display:none!important}
+html[data-lang="en"] .ar{display:none!important}
+html[data-lang="en"] body{font-family:var(--f-en)}
+.sub{color:var(--muted);font-size:13px;display:block}
+.langbtn{font:inherit;font-size:14px;font-weight:600;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:10px;padding:7px 14px;cursor:pointer}
+.hdr-r{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:20px 12px;flex-wrap:wrap}
+.brand h1{margin:0;font-size:22px;font-weight:700;text-wrap:balance}
+.brand .en{font-size:13px}
+.mark{width:10px;height:10px;background:var(--gold);transform:rotate(45deg);display:inline-block;margin-inline-start:8px;vertical-align:middle}
+.tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{border:0;background:transparent;color:var(--fg);font:inherit;font-size:14px;padding:6px 14px;border-radius:7px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-fg);font-weight:600}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.banner{background:var(--warn-soft);color:var(--warn);border-radius:8px;padding:10px 12px;font-size:14px;margin-block:8px}
+.meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px}
+@media (max-width:560px){.meta{grid-template-columns:1fr 1fr}.meta .f-date{grid-column:1/-1}}
+label.fld{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;min-width:0}
+select,input[type=text],input[type=number],input[type=date],textarea{font:inherit;font-size:15px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
+textarea{min-height:84px;resize:vertical}
+.progress{position:sticky;top:0;z-index:5;background:var(--bg);padding-block:12px 10px;display:flex;align-items:center;gap:12px}
+.bar{flex:1;height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .25s}
+.count{font-variant-numeric:tabular-nums;font-weight:700;font-size:14px;min-width:58px;text-align:end;direction:ltr;font-family:var(--f-en)}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;background:var(--gold-soft);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+section.grp{margin-top:18px}
+section.grp h2{font-size:16px;margin:0 0 8px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+section.grp h2 .n{margin-inline-start:auto;font-family:var(--f-en);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.list{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.item{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-top:1px solid var(--line);cursor:pointer}
+.item:first-child{border-top:0}
+.item input{appearance:none;flex:none;width:22px;height:22px;border:2px solid var(--muted);border-radius:6px;margin-top:2px;display:grid;place-content:center;cursor:pointer;background:var(--surface)}
+.item input:checked{background:var(--ok);border-color:var(--ok)}
+.item input:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.item .txt{min-width:0}
+.item.done .ar{color:var(--muted)}
+.extra{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:12px 14px;border-top:1px dashed var(--line);background:var(--gold-soft)}
+@media (max-width:560px){.extra{grid-template-columns:1fr}}
+.solo{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;max-width:260px}
+.submitbar{position:fixed;inset-inline:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));z-index:6}
+.submitbar .in{max-width:760px;margin:0 auto;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.submitbar .msg{flex:1;min-width:0;font-size:13px;color:var(--muted)}
+.submitbar .msg.err{color:var(--bad)}
+.submitbar .msg.ok{color:var(--ok)}
+.btn{font:inherit;font-weight:700;font-size:15px;border:0;border-radius:10px;padding:11px 22px;background:var(--accent);color:var(--accent-fg);cursor:pointer}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.logbar{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin-block:8px 14px}
+.logbar label.fld{width:180px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.bcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.bcard h3{margin:0;font-size:15px;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.pill{font-size:12px;font-weight:600;border-radius:99px;padding:2px 10px;white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.bad{background:var(--bad-soft);color:var(--bad)}
+.kv{display:flex;justify-content:space-between;gap:8px;font-size:13px}
+.kv b{font-variant-numeric:tabular-nums;font-family:var(--f-en);font-weight:600}
+.miss{font-size:12.5px;color:var(--warn);margin:0;padding-inline-start:16px}
+.note{font-size:13px;background:var(--bg);border-radius:8px;padding:6px 8px;overflow-wrap:anywhere}
+h2.sec{font-size:16px;margin:26px 0 8px}
+.mx{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.mx table{border-collapse:collapse;width:100%;min-width:520px;font-size:13px}
+.mx th,.mx td{padding:8px 10px;text-align:center;border-top:1px solid var(--line)}
+.mx thead th{border-top:0;font-weight:600;color:var(--muted);font-family:var(--f-en);font-variant-numeric:tabular-nums}
+.mx td:first-child,.mx th:first-child{text-align:start;font-weight:600}
+.dot{display:inline-block;min-width:44px;border-radius:6px;padding:2px 6px;font-family:var(--f-en);font-variant-numeric:tabular-nums;font-weight:600}
+.dot.ok{background:var(--ok-soft);color:var(--ok)} .dot.warn{background:var(--warn-soft);color:var(--warn)} .dot.bad{background:var(--bad-soft);color:var(--bad)}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+
+</head>
+<body>
+<div class="wrap" id="wrap" dir="rtl" lang="ar">
+  <header class="top">
+    <div class="brand">
+      <h1><span class="ar">قائمة الإغلاق اليومية</span><span class="en">Daily Closing Checklist</span><span class="mark" aria-hidden="true"></span></h1>
+      <span class="sub">بوش عباية · POSH Abaya</span>
+    </div>
+    <div class="hdr-r">
+      <div class="tabs" role="tablist">
+        <button role="tab" id="tab-form" aria-selected="true"><span class="ar">القائمة</span><span class="en">Checklist</span></button>
+        <button role="tab" id="tab-log" aria-selected="false"><span class="ar">سجل الفروع</span><span class="en">Branch log</span></button>
+      </div>
+      <button class="langbtn" id="langBtn" type="button"></button>
+    </div>
+  </header>
+  <div id="dbBanner" class="banner" hidden><span class="ar">تعذّر الاتصال بالشيت. تأكد من الإنترنت وحدّث الصفحة.</span> <span class="en">Couldn't reach the sheet. Check the internet connection and reload.</span></div>
+
+  <main id="view-form">
+    <div class="meta">
+      <label class="fld"><span class="ar">الفرع</span> <span class="en">Branch</span>
+        <select id="branch"><option value="">— اختر —</option></select>
+      </label>
+      <label class="fld"><span class="ar">الموظف</span> <span class="en">Staff</span>
+        <select id="staff" disabled><option value="">— اختر الفرع أولاً —</option></select>
+      </label>
+      <label class="fld f-date"><span class="ar">التاريخ</span> <span class="en">Date</span>
+        <input type="date" id="date">
+      </label>
+      <label class="fld" id="otherWrap" hidden style="grid-column:1/-1"><span class="ar">اسم الموظف</span> <span class="en">Staff name</span>
+        <input type="text" id="staffOther" autocomplete="off">
+      </label>
+    </div>
+    <div id="existing" class="banner" hidden></div>
+    <div class="progress"><div class="bar"><i id="barFill"></i></div><span class="count" id="count">0 / 0</span></div>
+    <div class="kpis">
+      <label class="fld"><span class="ar">تقييمات جوجل اليوم</span> <span class="en">Google reviews today</span><input type="number" id="reviews" inputmode="numeric" min="0" step="1" value="0"></label>
+      <label class="fld"><span class="ar">آراء العملاء المسجّلة اليوم</span> <span class="en">Feedback logged today</span><input type="number" id="feedback" inputmode="numeric" min="0" step="1" value="0"></label>
+    </div>
+    <div id="groups"></div>
+    <section class="grp">
+      <h2><span class="ar">عدد العملاء اليوم</span> <span class="en">Customers today</span></h2>
+      <div class="solo"><input type="number" id="customers" inputmode="numeric" min="0" step="1" aria-label="Customers today"></div>
+    </section>
+    <section class="grp">
+      <h2><span class="ar">ملاحظات</span> <span class="en">Notes</span></h2>
+      <textarea id="notes" ></textarea>
+    </section>
+  </main>
+
+  <main id="view-log" hidden>
+    <div class="logbar">
+      <label class="fld"><span class="ar">التاريخ</span> <span class="en">Date</span><input type="date" id="logDate"></label>
+    </div>
+    <div class="cards" id="cards"></div>
+    <h2 class="sec"><span class="ar">آخر ٧ أيام</span> <span class="en">Last 7 days · % complete</span></h2>
+    <div class="mx"><table id="matrix"></table></div>
+  </main>
+</div>
+
+<div class="submitbar" id="submitbar" dir="rtl">
+  <div class="in">
+    <div class="msg" id="msg"><span class="ar">اختر الفرع والموظف، ثم علّم على البنود.</span> <span class="en">Pick branch and staff, then tick each item.</span></div>
+    <button class="btn" id="submit" disabled><span class="ar">إرسال الإغلاق</span><span class="en">Submit closing</span></button>
+  </div>
+</div>
+
+<script>
+const BRANCHES = [
+  {id:"bawadi",  ar:"البوادي", en:"Bawadi",  staff:["Mohamed Ibrahim","Menna Nassar"]},
+  {id:"dalma",   ar:"دلما",    en:"Dalma",   staff:["Masum Barbhuyan","Noora Shreif"]},
+  {id:"bas",     ar:"باس",     en:"BAS",     staff:["Marwa Gamal","Mazyad Hasan"]},
+  {id:"matajer", ar:"متاجر",   en:"Matajer", staff:["Karim Gomaa"]},
+  {id:"mizhar",  ar:"مزهر",    en:"Mizhar",  staff:["Muhammad Imran"]},
+];
+const GROUPS = [
+  {id:"cash", ar:"الكاش والمبيعات", en:"Cash & Sales", extra:true, items:[
+    ["cash_count","عدّ الكاش ومطابقته مع إجمالي الكاش في السيستم","Count cash and match it to the POS cash total"],
+    ["card_settle","تسوية جهاز البطاقات ومطابقتها مع مبيعات البطاقة في السيستم","Settle the card machine and match it to POS card sales"],
+    ["z_report","إرسال سكرين الدايلي شيت وسكرين الـ closing من شوبيفاي على الجروب","Send screenshots of the Daily Sheet and the Shopify closing to the group"],
+    ["invoices_ok","مراجعة فواتير اليوم: رقم العميلة والإيميل واسم الموظف في كل فاتورة","Review today's invoices: customer phone, email and staff name on each"],
+    ["returns_ok","تسجيل أي استرجاع أو استبدال في السيستم مع الموافقة","Record any return or exchange in the system with approval"],
+  ]},
+  {id:"barcode", ar:"مطابقة الباركود المباع مع السيستم", en:"Sold barcodes vs. system", items:[
+    ["bc_match","مطابقة باركود كل قطعة مباعة اليوم مع بنود الفواتير في السيستم","Match every sold item's barcode to today's invoice lines"],
+    ["bc_report","تسجيل أي اختلاف (كود خطأ أو ناقص) وإبلاغ المدير","Log any mismatch (wrong or missing code) and report it"],
+  ]},
+  {id:"stock", ar:"المخزون والعرض", en:"Stock & Display", items:[
+    ["rails","إرجاع القطع المجرّبة لمكانها على الرف حسب المقاس","Return tried-on pieces to their rail by size"],
+    ["fitting","غرف القياس فاضية ونظيفة","Fitting rooms empty and clean"],
+    ["display","المانيكانات والعرض كامل بدون فراغات","Mannequins and display complete, no gaps"],
+    ["transfers","استلام التحويلات الواردة في السيستم وتجهيز الصادرة وتسجيلها","Receive incoming transfers in the system; pack and record outgoing ones"],
+    ["damaged","فصل القطع التالفة وتسجيلها","Separate and log damaged pieces"],
+  ]},
+  {id:"alt", ar:"الالتريشن", en:"Alterations", items:[
+    ["alt_new","تسجيل قطع الالتريشن الجديدة (رقم الفاتورة وتاريخ التسليم) وتجهيزها للمصنع","Log new alteration pieces (invoice no., due date) and bag them for the factory"],
+    ["alt_ready","إرسال رسالة واتساب للعميلات اللي وصلت عبايتهن","WhatsApp customers whose alteration has arrived"],
+  ]},
+  {id:"close", ar:"الأمان والإغلاق", en:"Security & Lock-up", items:[
+    ["walk","التأكد إن ما في أحد في غرف القياس أو المخزن","Check nobody is in the fitting rooms or stockroom"],
+    ["devices","شحن جهاز البطاقات والتلفون","Charge the card machine and the phone"],
+    ["power","إطفاء الإضاءة والتكييف والموسيقى (حسب نظام المول)","Lights, AC and music off (per mall rules)"],
+    ["drawer","قفل درج الكاش والمفاتيح مع الشخص المسؤول","Cash drawer locked; keys with the assigned person"],
+    ["door","قفل الباب/الشتر والتأكد منه","Lock the door or shutter and double-check it"],
+  ]},
+];
+const ALL = GROUPS.flatMap(g=>g.items.map(i=>({id:i[0],ar:i[1],en:i[2],g:g.id})));
+const TOTAL = ALL.length;
+const $ = s=>document.querySelector(s);
+const esc = s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const num = v=>Number(v||0).toLocaleString("en-US");
+// bilingual span pair; CSS shows one based on html[data-lang]
+const T = (ar,en)=>`<span class="ar">${ar}</span><span class="en">${en}</span>`;
+
+// ---------- language ----------
+let lang="ar";
+try{const v=localStorage.getItem("closingLang");if(v==="en"||v==="ar")lang=v}catch(e){}
+function applyLang(){
+  const dir=lang==="ar"?"rtl":"ltr";
+  document.documentElement.setAttribute("data-lang",lang);
+  document.documentElement.lang=lang;
+  $("#wrap").dir=dir;$("#wrap").lang=lang;$("#submitbar").dir=dir;
+  $("#langBtn").textContent=lang==="ar"?"English":"عربي";
+  $("#notes").placeholder=lang==="ar"?"اكتب سبب أي بند غير مكتمل، أو أي ملاحظة للإدارة…":"Reason for any unchecked item, or a note for management…";
+  [...branchSel.options].forEach(o=>{const b=BRANCHES.find(x=>x.id===o.value);o.textContent=b?(lang==="ar"?b.ar:b.en):(lang==="ar"?"— اختر —":"— Select —")});
+  fillStaff(true);
+}
+$("#langBtn").addEventListener("click",()=>{lang=lang==="ar"?"en":"ar";try{localStorage.setItem("closingLang",lang)}catch(e){}applyLang()});
+
+// Dubai business date; closings before 05:00 count for the previous day
+function businessDate(d=new Date()){return new Date(d.getTime()-1*3600e3).toISOString().slice(0,10)}
+function addDays(iso,n){const d=new Date(iso+"T12:00:00Z");d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10)}
+function fmtTime(ms){try{return new Date(ms).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Asia/Dubai"})}catch(e){return""}}
+
+// ---------- form ----------
+const checked = new Set();
+const branchSel=$("#branch"), staffSel=$("#staff");
+BRANCHES.forEach(b=>branchSel.add(new Option(b.ar,b.id)));
+$("#date").value=businessDate(); $("#logDate").value=businessDate();
+
+$("#groups").innerHTML = GROUPS.map(g=>`
+  <section class="grp">
+    <h2>${T(g.ar,g.en)}<span class="n" id="n-${g.id}"></span></h2>
+    <div class="list">
+      ${g.items.map(i=>`<label class="item" for="c-${i[0]}"><input type="checkbox" id="c-${i[0]}" data-id="${i[0]}"><span class="txt">${T(i[1],i[2])}</span></label>`).join("")}
+      ${g.extra?`<div class="extra">
+        <label class="fld">${T("إجمالي مبيعات اليوم (درهم)","Today's sales (AED)")}<input type="number" id="sales" inputmode="decimal" min="0" step="0.01"></label>
+        <label class="fld">${T("فرق الكاش (درهم، − ناقص / + زيادة)","Cash variance (AED, − short / + over)")}<input type="number" id="cashVar" inputmode="decimal" step="0.01" value="0"></label>
+        <label class="fld">${T("عدد اختلافات الباركود","Barcode mismatches")}<input type="number" id="bcMis" inputmode="numeric" min="0" step="1" value="0"></label>
+      </div>`:""}
+    </div>
+  </section>`).join("");
+
+document.querySelectorAll(".item input").forEach(cb=>cb.addEventListener("change",()=>{
+  cb.checked?checked.add(cb.dataset.id):checked.delete(cb.dataset.id);
+  cb.closest(".item").classList.toggle("done",cb.checked);
+  refresh();
+}));
+function fillStaff(keep){
+  const prev=staffSel.value;
+  const b=BRANCHES.find(x=>x.id===branchSel.value);
+  staffSel.innerHTML="";
+  if(!b){staffSel.add(new Option(lang==="ar"?"— اختر الفرع أولاً —":"— Select branch first —",""));staffSel.disabled=true;return}
+  staffSel.disabled=false;
+  staffSel.add(new Option(lang==="ar"?"— اختر —":"— Select —",""));
+  b.staff.forEach(s=>staffSel.add(new Option(s,s)));
+  staffSel.add(new Option(lang==="ar"?"موظف آخر":"Other","__other"));
+  if(keep)staffSel.value=prev;
+}
+branchSel.addEventListener("change",()=>{fillStaff(false);$("#otherWrap").hidden=true;refresh()});
+staffSel.addEventListener("change",()=>{$("#otherWrap").hidden=staffSel.value!=="__other";refresh()});
+["#staffOther","#notes","#date"].forEach(s=>$(s).addEventListener("input",refresh));
+
+function staffName(){return staffSel.value==="__other"?$("#staffOther").value.trim():staffSel.value}
+function setMsg(t,cls=""){const m=$("#msg");m.className="msg "+cls;m.innerHTML=t}
+
+let busy=false, online=true;
+const API="https://script.google.com/macros/s/AKfycbxxww96h2M6PnZK_KR5U9IrjDcny3_JIe97WReyNf5MogKpM9wzoWuy-lfX16C28Hps/exec";
+async function gs(fn,...a){
+  let r;
+  if(fn==="getClosings") r=await fetch(API+"?action=list&from="+encodeURIComponent(a[0])+"&to="+encodeURIComponent(a[1]));
+  else r=await fetch(API,{method:"POST",body:JSON.stringify(a[0])});
+  const j=await r.json();
+  if(!j.ok) throw new Error(j.error||"Server error");
+  return j.rows;
+}
+const closings=new Map();
+
+function refresh(){
+  const n=checked.size;
+  $("#barFill").style.width=(n/TOTAL*100)+"%";
+  $("#count").textContent=n+" / "+TOTAL;
+  GROUPS.forEach(g=>{const k=g.items.filter(i=>checked.has(i[0])).length;$("#n-"+g.id).textContent=k+"/"+g.items.length});
+  const ex=closings.get($("#date").value+"_"+branchSel.value);
+  const eb=$("#existing");
+  if(ex){const t=esc(fmtTime(ex.submittedAt)),who=esc(ex.staff);eb.hidden=false;
+    eb.innerHTML=T(`تم إرسال إغلاق هذا الفرع لهذا التاريخ الساعة ${t} بواسطة ${who}. الإرسال مرة ثانية يستبدله.`,`Already submitted at ${t} by ${who}. Submitting again replaces it.`)}
+  else eb.hidden=true;
+  const ready=branchSel.value&&staffName()&&$("#date").value;
+  const missing=TOTAL-n, needNote=missing>0&&!$("#notes").value.trim();
+  $("#submit").disabled=!online||!ready||needNote||busy;
+  if(!ready) setMsg(T("اختر الفرع والموظف، ثم علّم على البنود.","Pick branch and staff, then tick each item."));
+  else if(needNote) setMsg(T(`باقي ${missing} بند — اكتب السبب في الملاحظات للإرسال.`,`${missing} left. Add a reason in Notes to submit.`),"err");
+  else if(missing===0) setMsg(T("كل البنود مكتملة ✓","All items done ✓"),"ok");
+  else setMsg(T(`${missing} بند غير مكتمل مع ملاحظة.`,`${missing} unchecked, with a note.`));
+}
+
+$("#submit").addEventListener("click",async()=>{
+  busy=true;refresh();setMsg(T("جاري الإرسال…","Saving…"));
+  const date=$("#date").value, branch=branchSel.value, b=BRANCHES.find(x=>x.id===branch);
+  const miss=ALL.filter(i=>!checked.has(i.id));
+  const body={date,branch,branchName:b.en,staff:staffName(),checked:[...checked],missing:miss.map(i=>i.id),missingEn:miss.map(i=>i.en),
+    done:checked.size,total:TOTAL,sales:Number($("#sales").value)||0,cashVariance:Number($("#cashVar").value)||0,
+    barcodeMismatches:Number($("#bcMis").value)||0,googleReviews:Number($("#reviews").value)||0,
+    feedback:Number($("#feedback").value)||0,customers:Number($("#customers").value)||0,
+    notes:$("#notes").value.trim(),submittedAt:Date.now()};
+  try{
+    await gs("submitClosing",body);
+    closings.set(date+"_"+branch,body);renderLog();
+    busy=false;
+    document.querySelectorAll(".item input").forEach(cb=>{cb.checked=false;cb.closest(".item").classList.remove("done")});
+    checked.clear();
+    ["#notes","#sales","#customers"].forEach(s=>$(s).value="");
+    ["#cashVar","#bcMis","#reviews","#feedback"].forEach(s=>$(s).value="0");
+    refresh();setMsg(T(`تم الإرسال — ${esc(b.ar)}، ${date}. شكراً!`,`Submitted: ${esc(b.en)}, ${date}. Thank you!`),"ok");
+    window.scrollTo({top:0});
+  }catch(e){
+    busy=false;refresh();
+    setMsg(T("تعذّر الإرسال، تأكد من الإنترنت وحاول مرة ثانية.","Couldn't save. Check the connection and try again."),"err");
+  }
+});
+
+// ---------- log ----------
+function cls(c){if(!c)return"bad";return c.done===c.total&&!c.cashVariance&&!c.barcodeMismatches?"ok":"warn"}
+function renderLog(){
+  const day=$("#logDate").value;
+  $("#cards").innerHTML=BRANCHES.map(b=>{
+    const c=closings.get(day+"_"+b.id);
+    if(!c) return `<div class="bcard"><h3>${T(b.ar,b.en)} <span class="pill bad">${T("لم يُرسل","Missing")}</span></h3></div>`;
+    const k=cls(c), miss=(c.missing||[]).map(id=>ALL.find(a=>a.id===id)).filter(Boolean);
+    const kv=(ar,en,v,style="")=>`<div class="kv"><span>${T(ar,en)}</span><b${style}>${v}</b></div>`;
+    return `<div class="bcard"><h3>${T(b.ar,b.en)} <span class="pill ${k}">${c.done}/${c.total}</span></h3>
+      ${kv("الموظف","Staff",esc(c.staff))}
+      ${kv("وقت الإرسال","Submitted",esc(fmtTime(c.submittedAt)))}
+      ${kv("المبيعات","Sales",num(c.sales)+" AED")}
+      ${kv("العملاء","Customers",num(c.customers))}
+      ${kv("تقييمات جوجل","Google reviews",num(c.googleReviews))}
+      ${kv("آراء العملاء","Feedback",num(c.feedback))}
+      ${kv("فرق الكاش","Cash variance",num(c.cashVariance),` style="color:var(--${c.cashVariance?"bad":"ok"})"`)}
+      ${kv("اختلافات الباركود","Barcode mismatches",num(c.barcodeMismatches),` style="color:var(--${c.barcodeMismatches?"bad":"ok"})"`)}
+      ${miss.length?`<ul class="miss">${miss.map(m=>`<li>${T(esc(m.ar),esc(m.en))}</li>`).join("")}</ul>`:""}
+      ${c.notes?`<div class="note">${esc(c.notes)}</div>`:""}</div>`;
+  }).join("");
+  const days=[...Array(7)].map((_,i)=>addDays(day,i-6));
+  $("#matrix").innerHTML=`<thead><tr><th>${T("الفرع","Branch")}</th>${days.map(d=>`<th>${d.slice(8)}/${d.slice(5,7)}</th>`).join("")}</tr></thead><tbody>${
+    BRANCHES.map(b=>`<tr><td>${T(b.ar,b.en)}</td>${days.map(d=>{const c=closings.get(d+"_"+b.id);
+      return `<td><span class="dot ${cls(c)}">${c?Math.round(c.done/c.total*100)+"%":"—"}</span></td>`}).join("")}</tr>`).join("")}</tbody>`;
+}
+$("#logDate").addEventListener("input",()=>{renderLog();load(addDays($("#logDate").value,-6),$("#logDate").value)});
+
+// ---------- tabs ----------
+function show(tab){
+  const log=tab==="log";
+  $("#view-form").hidden=log;$("#view-log").hidden=!log;$("#submitbar").hidden=log;
+  $("#tab-form").setAttribute("aria-selected",!log);$("#tab-log").setAttribute("aria-selected",log);
+  if(log)renderLog();
+}
+$("#tab-form").onclick=()=>show("form");$("#tab-log").onclick=()=>show("log");
+applyLang();
+show(location.hash==="#log"?"log":"form");
+refresh();renderLog();
+
+// ---------- data (Google Sheet via Apps Script) ----------
+async function load(from,to){
+  try{
+    const rows=await gs("getClosings",from,to);
+    (rows||[]).forEach(r=>closings.set(r.date+"_"+r.branch,r));
+    online=true;$("#dbBanner").hidden=true;
+  }catch(e){online=false;$("#dbBanner").hidden=false}
+  refresh();renderLog();
+}
+load(addDays(businessDate(),-30),businessDate());
+</script>
+
+</body>
+</html>
