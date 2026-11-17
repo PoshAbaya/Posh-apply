@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>POSH Abaya — Customer Feedback</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --dark: #0f0f1a; --dark2: #1a1a2e; --gold: #c9a96e; --gold-light: #e8d5b0; --white: #ffffff; --off: #f7f5f1; --muted: #8a8a9a; --green-bg: #e8f5ef; --green-text: #0a6640; --amber-bg: #fdf3e3; --amber-text: #7a4f00; --red-bg: #fdecea; --red-text: #9c2020; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--off); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding-bottom: 40px; }
+  .header { width: 100%; background: var(--dark2); padding: 16px 20px 12px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  .header-logo { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--gold); letter-spacing: 1px; }
+  .header-sub { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+  .branch-pill { font-size: 11px; background: rgba(201,169,110,0.2); color: var(--gold-light); padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(201,169,110,0.3); white-space: nowrap; }
+  .counter-bar { width: 100%; background: var(--dark); padding: 7px 20px; display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.4); }
+  .counter-bar strong { color: var(--gold); }
+  .card { width: 100%; max-width: 520px; background: var(--white); border-radius: 16px; overflow: hidden; margin: 18px 16px 0; box-shadow: 0 2px 20px rgba(0,0,0,0.07); }
+  .card-body { padding: 22px; }
+  .step-dots { display: flex; gap: 6px; justify-content: center; padding: 14px 0 0; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: #ddd; transition: all 0.2s; }
+  .dot.active { background: var(--dark2); transform: scale(1.2); }
+  .dot.done { background: var(--gold); }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  .sec-label { font-size: 10px; font-weight: 500; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .opt { background: var(--off); border: 1.5px solid transparent; border-radius: 10px; padding: 13px 8px; text-align: center; cursor: pointer; font-size: 12px; color: #333; transition: all 0.15s; line-height: 1.4; user-select: none; }
+  .opt:active { transform: scale(0.97); }
+  .opt .ico { font-size: 20px; display: block; margin-bottom: 5px; }
+  .opt.sel { background: var(--dark2); color: var(--white); border-color: var(--dark2); }
+  .type-btn { background: var(--off); border: 1.5px solid transparent; border-radius: 12px; padding: 18px 14px; text-align: center; cursor: pointer; transition: all 0.15s; user-select: none; }
+  .type-btn .ico { font-size: 26px; display: block; margin-bottom: 8px; }
+  .type-btn .lbl { font-size: 13px; font-weight: 500; color: #222; }
+  .type-btn .sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
+  .type-btn.sel { background: var(--dark2); border-color: var(--dark2); }
+  .type-btn.sel .lbl, .type-btn.sel .sub { color: var(--white); }
+  .tag-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .tag { background: var(--off); border: 1.5px solid transparent; border-radius: 30px; padding: 7px 15px; font-size: 12px; cursor: pointer; color: #333; transition: all 0.15s; user-select: none; }
+  .tag.sel { background: var(--dark2); color: var(--white); border-color: var(--dark2); }
+  .field { width: 100%; border: 1.5px solid #e5e5e5; border-radius: 10px; padding: 11px 14px; font-size: 14px; color: #222; background: var(--white); margin-bottom: 12px; font-family: 'DM Sans', sans-serif; resize: vertical; transition: border-color 0.15s; -webkit-appearance: none; }
+  .field:focus { outline: none; border-color: var(--dark2); }
+  .field-last { margin-bottom: 0; }
+  .phone-row { display: flex; gap: 8px; margin-bottom: 12px; }
+  .phone-pre { border: 1.5px solid #e5e5e5; border-radius: 10px; padding: 11px 10px; font-size: 13px; color: var(--muted); background: var(--off); width: 58px; text-align: center; flex-shrink: 0; }
+  .btn-main { width: 100%; background: var(--dark2); color: var(--white); border: none; border-radius: 10px; padding: 14px; font-size: 14px; font-weight: 500; cursor: pointer; margin-top: 6px; font-family: 'DM Sans', sans-serif; transition: opacity 0.15s; }
+  .btn-main:disabled { opacity: 0.3; cursor: default; }
+  .btn-main:active:not(:disabled) { opacity: 0.85; }
+  .btn-ghost { width: 100%; background: transparent; color: #555; border: 1.5px solid #ddd; border-radius: 10px; padding: 12px; font-size: 13px; cursor: pointer; margin-top: 8px; font-family: 'DM Sans', sans-serif; }
+  .back { font-size: 12px; color: var(--muted); cursor: pointer; text-decoration: underline; display: inline-block; margin-bottom: 18px; }
+  .divider { height: 1px; background: #f0f0f0; margin: 14px 0; }
+  .detail-box { background: #fffbf5; border: 1.5px solid #f0e0c0; border-radius: 10px; padding: 14px; margin-bottom: 14px; }
+  .detail-box .dl { font-size: 10px; font-weight: 500; color: var(--amber-text); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .detail-box .field { background: var(--white); }
+  .detail-box .field-last { margin-bottom: 0; }
+  .summary-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid #f5f5f5; font-size: 13px; }
+  .summary-item:last-child { border-bottom: none; }
+  .s-label { color: var(--muted); flex-shrink: 0; margin-right: 12px; }
+  .s-val { color: #222; font-weight: 500; text-align: right; }
+  .pill { display: inline-block; border-radius: 20px; padding: 5px 14px; font-size: 12px; margin: 4px 4px 0 0; font-weight: 500; }
+  .p-green { background: var(--green-bg); color: var(--green-text); }
+  .p-amber { background: var(--amber-bg); color: var(--amber-text); }
+  .p-red { background: var(--red-bg); color: var(--red-text); }
+  .result-icon { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; font-size: 26px; }
+  .icon-ok { background: var(--green-bg); }
+  .icon-err { background: var(--red-bg); }
+  .spinner { width: 36px; height: 36px; border: 3px solid #eee; border-top-color: var(--dark2); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .sending-box { text-align: center; padding: 50px 24px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div><div class="header-logo">POSH Abaya</div><div class="header-sub">Customer Feedback</div></div>
+  <span class="branch-pill" id="branchPill">Select branch</span>
+</div>
+<div class="counter-bar">
+  <span>Entries today: <strong id="entryCount">0</strong></span>
+  <span id="lastTime"></span>
+</div>
+<div class="step-dots">
+  <div class="dot active" id="d1"></div><div class="dot" id="d2"></div><div class="dot" id="d3"></div><div class="dot" id="d4"></div>
+</div>
+
+<div class="card"><div class="card-body">
+
+  <!-- S0: Branch -->
+  <div class="screen active" id="s0">
+    <p class="sec-label">Select branch</p>
+    <div class="grid-3">
+      <div class="opt" onclick="pickBranch(this,'Bawadi')"><span class="ico">🏪</span>Bawadi</div>
+      <div class="opt" onclick="pickBranch(this,'Dalma')"><span class="ico">🏪</span>Dalma</div>
+      <div class="opt" onclick="pickBranch(this,'BAS')"><span class="ico">🏪</span>BAS</div>
+      <div class="opt" onclick="pickBranch(this,'Matajer')"><span class="ico">🏪</span>Matajer</div>
+      <div class="opt" onclick="pickBranch(this,'Mizhar')"><span class="ico">🏪</span>Mizhar</div>
+      <div class="opt" onclick="pickBranch(this,'Online')"><span class="ico">💻</span>Online</div>
+    </div>
+    <button class="btn-main" id="btn0" onclick="goTo(1)" disabled>Next</button>
+  </div>
+
+  <!-- S1: Type -->
+  <div class="screen" id="s1">
+    <span class="back" onclick="goTo(0)">← Back</span>
+    <p class="sec-label">Type of feedback</p>
+    <div class="grid-2" style="margin-bottom:6px;">
+      <div class="type-btn" onclick="pickType(this,'complaint')" id="tComplaint"><span class="ico">💬</span><div class="lbl">Customer complaint</div><div class="sub">Purchased — has an issue</div></div>
+      <div class="type-btn" onclick="pickType(this,'lost')" id="tLost"><span class="ico">🚶</span><div class="lbl">Lost customer</div><div class="sub">Left without buying</div></div>
+    </div>
+    <button class="btn-main" id="btn1" onclick="goTo(2)" disabled>Next</button>
+  </div>
+
+  <!-- S2: Customer Info -->
+  <div class="screen" id="s2">
+    <span class="back" onclick="goTo(1)">← Back</span>
+    <p class="sec-label">Customer information</p>
+    <input class="field" id="custName" type="text" placeholder="Customer name (optional)">
+    <div class="phone-row">
+      <div class="phone-pre">+971</div>
+      <input class="field" id="custPhone" type="tel" placeholder="Phone number (optional)" style="flex:1;margin-bottom:0;">
+    </div>
+    <div class="divider"></div>
+    <p class="sec-label">Customer type</p>
+    <div class="grid-2">
+      <div class="opt" onclick="pickOne(this,'custType','New')">New</div>
+      <div class="opt" onclick="pickOne(this,'custType','Returning')">Returning</div>
+    </div>
+    <button class="btn-main" onclick="goTo(3)">Next</button>
+  </div>
+
+  <!-- S3: Details -->
+  <div class="screen" id="s3">
+    <span class="back" onclick="goTo(2)">← Back</span>
+
+    <!-- COMPLAINT FLOW -->
+    <div id="flowComplaint" style="display:none;">
+      <p class="sec-label">Complaint type</p>
+      <div class="grid-2">
+        <div class="opt" onclick="pickComplaint(this,'Quality — Fit')"><span class="ico">👗</span>Quality — Fit</div>
+        <div class="opt" onclick="pickComplaint(this,'Quality — Fabric')"><span class="ico">🧵</span>Quality — Fabric</div>
+        <div class="opt" onclick="pickComplaint(this,'Quality — Other')"><span class="ico">🔍</span>Quality — Other</div>
+        <div class="opt" onclick="pickComplaint(this,'Delay')"><span class="ico">⏱️</span>Delay</div>
+        <div class="opt" onclick="pickComplaint(this,'Refund')"><span class="ico">↩️</span>Refund</div>
+        <div class="opt" onclick="pickComplaint(this,'Other')"><span class="ico">💬</span>Other</div>
+      </div>
+      <!-- detail box — shown for all complaint types -->
+      <div id="cDetailBox" class="detail-box" style="display:none;">
+        <div class="dl" id="cDetailLabel">Details</div>
+        <textarea class="field field-last" id="cDetailText" rows="3" placeholder="Describe the issue..."></textarea>
+      </div>
+    </div>
+
+    <!-- LOST CUSTOMER FLOW -->
+    <div id="flowLost" style="display:none;">
+      <p class="sec-label">Why did she leave without buying?</p>
+      <div class="grid-2">
+        <div class="opt" onclick="pickLost(this,'Design not available')"><span class="ico">🎨</span>Design not available</div>
+        <div class="opt" onclick="pickLost(this,'Size not available')"><span class="ico">📏</span>Size not available</div>
+        <div class="opt" onclick="pickLost(this,'Price issue')"><span class="ico">💰</span>Price issue</div>
+        <div class="opt" onclick="pickLost(this,'Not interested')"><span class="ico">🚶</span>Not interested</div>
+      </div>
+
+      <!-- Design not available -->
+      <div id="detailDesign" class="detail-box" style="display:none;">
+        <div class="dl">Design type</div>
+        <div class="tag-wrap">
+          <div class="tag" onclick="pickOneTag(this,'designType','Basic')">Basic</div>
+          <div class="tag" onclick="pickOneTag(this,'designType','Embroidered')">Embroidered</div>
+          <div class="tag" onclick="pickOneTag(this,'designType','Beadwork')">Beadwork</div>
+          <div class="tag" onclick="pickOneTag(this,'designType','Lace')">Lace</div>
+          <div class="tag" onclick="pickOneTag(this,'designType','Other')">Other</div>
+        </div>
+        <div class="dl">Additional details</div>
+        <textarea class="field field-last" id="designDetail" rows="2" placeholder="Any extra details about the design..."></textarea>
+      </div>
+
+      <!-- Size not available -->
+      <div id="detailSize" class="detail-box" style="display:none;">
+        <div class="dl">Model number</div>
+        <input class="field" id="sizeModel" type="text" placeholder="Model number (e.g. PP-1042)">
+        <div class="dl">Length</div>
+        <input class="field" id="sizeLength" type="text" placeholder="Enter length measurement">
+        <div class="dl">Body</div>
+        <input class="field field-last" id="sizeBody" type="text" placeholder="Enter body measurement">
+      </div>
+
+      <!-- Price issue -->
+      <div id="detailPrice" class="detail-box" style="display:none;">
+        <div class="dl">Product line</div>
+        <div class="tag-wrap">
+          <div class="tag" onclick="pickPriceLine(this,'BS')">BS</div>
+          <div class="tag" onclick="pickPriceLine(this,'NS')">NS</div>
+          <div class="tag" onclick="pickPriceLine(this,'VIP')">VIP</div>
+        </div>
+        <div class="dl">Price range (AED)</div>
+        <div class="tag-wrap" id="priceRangeWrap" style="margin-bottom:0;min-height:36px;"></div>
+      </div>
+
+      <div class="divider"></div>
+      <p class="sec-label">Retain this customer?</p>
+      <div class="grid-2">
+        <div class="opt" onclick="pickOne(this,'retain','Yes — follow up')">Yes — follow up</div>
+        <div class="opt" onclick="pickOne(this,'retain','No action needed')">No action</div>
+      </div>
+    </div>
+
+    <button class="btn-main" onclick="submitEntry()">Submit to Google Sheet</button>
+  </div>
+
+  <!-- S4: Sending -->
+  <div class="screen" id="s4">
+    <div class="sending-box"><div class="spinner"></div><p style="font-size:14px;color:#888;">Saving to Google Sheet...</p></div>
+  </div>
+
+  <!-- S5: Done -->
+  <div class="screen" id="s5">
+    <div style="text-align:center;padding:8px 0 16px;">
+      <div class="result-icon" id="resultIcon">✓</div>
+      <p style="font-size:17px;font-weight:500;margin-bottom:5px;" id="resultTitle">Saved to Google Sheet</p>
+      <p style="font-size:13px;color:#888;" id="resultSub"></p>
+    </div>
+    <div id="summaryBox" style="border:1px solid #f0f0f0;border-radius:10px;padding:14px;margin-bottom:14px;"></div>
+    <div id="actionBox" style="margin-bottom:10px;"></div>
+    <button class="btn-ghost" onclick="newEntry()">Add another entry</button>
+  </div>
+
+</div></div>
+
+<script>
+var SHEET_URL='https://script.google.com/macros/s/AKfycbzniqBRNGmrVZazaMzQn5UjNfmlI9UVkHOaGJRu5XK7egJ7rPcHR2tsmPAX2PwsRFp1/exec';
+var st={branch:'',type:'',custType:'',complaintType:'',lostReason:'',retain:'',designType:'',priceLine:'',priceRange:''};
+var count=0;
+
+var priceRanges={
+  'BS':['Less than 350'],
+  'NS':['Less than 550'],
+  'VIP':['750–1000','1000–1450']
+};
+
+var cLabels={
+  'Quality — Fit':'Fit issue details',
+  'Quality — Fabric':'Fabric issue details',
+  'Quality — Other':'Quality details required',
+  'Delay':'Delay details required',
+  'Refund':'Refund details required',
+  'Other':'Details required'
+};
+var cPlaceholders={
+  'Quality — Fit':'Describe the fit issue...',
+  'Quality — Fabric':'Describe the fabric issue...',
+  'Quality — Other':'Describe the quality issue...',
+  'Delay':'Describe the delay issue...',
+  'Refund':'Reason for refund, item, amount...',
+  'Other':'Describe the complaint...'
+};
+
+function goTo(n){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('s'+n).classList.add('active');
+  updateDots(n);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function updateDots(n){
+  for(var i=1;i<=4;i++){var d=document.getElementById('d'+i);if(!d)continue;d.className='dot';if(i-1<n)d.classList.add('done');else if(i-1===n)d.classList.add('active');}
+}
+function pickBranch(el,val){
+  document.querySelectorAll('#s0 .opt').forEach(function(b){b.classList.remove('sel');});
+  el.classList.add('sel');st.branch=val;
+  document.getElementById('branchPill').textContent=val;
+  document.getElementById('btn0').disabled=false;
+}
+function pickType(el,val){
+  document.getElementById('tComplaint').classList.remove('sel');
+  document.getElementById('tLost').classList.remove('sel');
+  el.classList.add('sel');st.type=val;
+  document.getElementById('flowComplaint').style.display=(val==='complaint')?'block':'none';
+  document.getElementById('flowLost').style.display=(val==='lost')?'block':'none';
+  document.getElementById('btn1').disabled=false;
+}
+function pickOne(el,key,val){
+  el.parentElement.querySelectorAll('.opt').forEach(function(b){b.classList.remove('sel');});
+  el.classList.add('sel');st[key]=val;
+}
+function pickOneTag(el,key,val){
+  el.parentElement.querySelectorAll('.tag').forEach(function(t){t.classList.remove('sel');});
+  el.classList.add('sel');st[key]=val;
+}
+function pickComplaint(el,val){
+  document.querySelectorAll('#flowComplaint .grid-2 .opt').forEach(function(b){b.classList.remove('sel');});
+  el.classList.add('sel');st.complaintType=val;
+  var box=document.getElementById('cDetailBox');
+  box.style.display='block';
+  document.getElementById('cDetailLabel').textContent=cLabels[val]||'Details';
+  document.getElementById('cDetailText').placeholder=cPlaceholders[val]||'Describe the issue...';
+  document.getElementById('cDetailText').value='';
+}
+function pickLost(el,val){
+  document.querySelectorAll('#flowLost .grid-2 .opt').forEach(function(b){b.classList.remove('sel');});
+  el.classList.add('sel');st.lostReason=val;
+  document.getElementById('detailDesign').style.display=(val==='Design not available')?'block':'none';
+  document.getElementById('detailSize').style.display=(val==='Size not available')?'block':'none';
+  document.getElementById('detailPrice').style.display=(val==='Price issue')?'block':'none';
+  if(val!=='Price issue'){st.priceLine='';st.priceRange='';}
+  if(val!=='Design not available'){st.designType='';}
+}
+function pickPriceLine(el,val){
+  document.querySelectorAll('#detailPrice .tag-wrap:first-of-type .tag').forEach(function(t){t.classList.remove('sel');});
+  el.classList.add('sel');st.priceLine=val;st.priceRange='';
+  var wrap=document.getElementById('priceRangeWrap');
+  wrap.innerHTML='';
+  var ranges=priceRanges[val]||[];
+  ranges.forEach(function(r){
+    var t=document.createElement('div');
+    t.className='tag';t.textContent=r;
+    t.onclick=function(){
+      wrap.querySelectorAll('.tag').forEach(function(x){x.classList.remove('sel');});
+      t.classList.add('sel');st.priceRange=r;
+    };
+    wrap.appendChild(t);
+  });
+}
+
+function submitEntry(){
+  var d=new Date();var isC=st.type==='complaint';
+  var payload={
+    date:d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),
+    time:d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),
+    branch:st.branch,
+    entryType:isC?'Complaint':'Lost Customer',
+    customerName:document.getElementById('custName').value||'Anonymous',
+    phone:document.getElementById('custPhone').value?'+971'+document.getElementById('custPhone').value:'',
+    customerType:st.custType||'',
+    complaintType:st.complaintType||'',
+    complaintDetails:document.getElementById('cDetailText').value||'',
+    lostReason:st.lostReason||'',
+    designType:st.designType||'',
+    designDetails:document.getElementById('designDetail').value||'',
+    modelNumber:document.getElementById('sizeModel').value||'',
+    sizeLength:document.getElementById('sizeLength').value||'',
+    sizeBody:document.getElementById('sizeBody').value||'',
+    priceLine:st.priceLine||'',
+    priceRange:st.priceRange||'',
+    retain:st.retain||''
+  };
+  goTo(4);
+  // No 'no-cors': the Apps Script web app returns CORS headers, so we can read its reply
+  // and only show "Saved" when the sheet confirms {"status":"success"}.
+  fetch(SHEET_URL,{method:'POST',body:JSON.stringify(payload)})
+  .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+  .then(function(res){
+    if(!res || res.status!=='success') throw new Error('Sheet did not confirm');
+    count++;
+    document.getElementById('entryCount').textContent=count;
+    document.getElementById('lastTime').textContent='Last: '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    showDone(payload,true);
+  }).catch(function(){showDone(payload,false);});
+}
+
+function showDone(e,ok){
+  var icon=document.getElementById('resultIcon');
+  icon.textContent=ok?'✓':'!';
+  icon.className='result-icon '+(ok?'icon-ok':'icon-err');
+  document.getElementById('resultTitle').textContent=ok?'Saved to Google Sheet':'Connection issue — try again';
+  document.getElementById('resultSub').textContent=ok?(count+' entr'+(count===1?'y':'ies')+' recorded today'):'Check internet connection';
+
+  var rows=[
+    ['Branch',e.branch],['Date',e.date+' '+e.time],
+    ['Type',e.entryType],
+    ['Customer',(e.customerName||'Anonymous')+(e.customerType?' ('+e.customerType+')':'')],
+    ['Phone',e.phone||'—']
+  ];
+  if(e.complaintType) rows.push(['Complaint',e.complaintType]);
+  if(e.complaintDetails) rows.push(['Details',e.complaintDetails]);
+  if(e.lostReason) rows.push(['Reason',e.lostReason]);
+  if(e.designType) rows.push(['Design type',e.designType]);
+  if(e.designDetails) rows.push(['Design details',e.designDetails]);
+  if(e.modelNumber) rows.push(['Model no.',e.modelNumber]);
+  if(e.sizeLength) rows.push(['Length',e.sizeLength]);
+  if(e.sizeBody) rows.push(['Body',e.sizeBody]);
+  if(e.priceLine) rows.push(['Product line',e.priceLine]);
+  if(e.priceRange) rows.push(['Price range',e.priceRange+' AED']);
+  if(e.retain) rows.push(['Retain',e.retain]);
+
+  var html='';
+  rows.forEach(function(r){html+='<div class="summary-item"><span class="s-label">'+r[0]+'</span><span class="s-val">'+r[1]+'</span></div>';});
+  document.getElementById('summaryBox').innerHTML=html;
+
+  var ac='';
+  if(e.entryType==='Complaint'){
+    if(e.complaintType==='Refund') ac+='<span class="pill p-red">Refund request — escalate to Mr. Wael</span>';
+    else if(e.complaintType==='Delay') ac+='<span class="pill p-red">Delay complaint — escalate to Mr. Wael</span>';
+    else if(e.complaintType&&e.complaintType.indexOf('Quality')===0) ac+='<span class="pill p-amber">Quality issue — log for inspection</span>';
+    else ac+='<span class="pill p-amber">Complaint logged</span>';
+  } else {
+    if(e.lostReason==='Design not available') ac+='<span class="pill p-amber">Design gap — log for product team</span>';
+    else if(e.lostReason==='Size not available') ac+='<span class="pill p-amber">Size gap — replenish request</span>';
+    else if(e.lostReason==='Price issue') ac+='<span class="pill p-amber">Pricing flag — escalate to Mr. Wael</span>';
+    else ac+='<span class="pill p-green">Logged successfully</span>';
+    if(e.retain==='Yes — follow up') ac+='<span class="pill p-amber">Follow-up call needed</span>';
+  }
+  if(!ok) ac='<span class="pill p-red">Not saved — your answers are kept, tap Try again</span><button class="btn-main" onclick="goTo(3)">Try again</button>';
+  document.getElementById('actionBox').innerHTML=ac;
+  goTo(5);
+}
+
+function newEntry(){
+  var br=st.branch;
+  st={branch:br,type:'',custType:'',complaintType:'',lostReason:'',retain:'',designType:'',priceLine:'',priceRange:''};
+  document.querySelectorAll('.opt,.tag,.type-btn').forEach(function(el){el.classList.remove('sel');});
+  ['custName','custPhone','cDetailText','designDetail','sizeModel','sizeLength','sizeBody'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.value='';
+  });
+  ['detailDesign','detailSize','detailPrice','cDetailBox','flowComplaint','flowLost'].forEach(function(id){
+    document.getElementById(id).style.display='none';
+  });
+  document.getElementById('priceRangeWrap').innerHTML='';
+  document.getElementById('btn1').disabled=true;
+  document.querySelectorAll('#s0 .opt').forEach(function(b){if(b.lastChild.textContent.trim()===br)b.classList.add('sel');});
+  document.getElementById('btn0').disabled=false;
+  goTo(0);
+}
+updateDots(0);
+// Optional ?branch=Matajer in the link preselects the branch and skips step 1
+(function(){
+  var b=new URLSearchParams(location.search).get('branch');
+  if(!b) return;
+  document.querySelectorAll('#s0 .opt').forEach(function(el){
+    var name=el.lastChild.textContent.trim();
+    if(name.toLowerCase()===b.toLowerCase()){ pickBranch(el,name); goTo(1); }
+  });
+})();
+</script>
+</body>
+</html>
